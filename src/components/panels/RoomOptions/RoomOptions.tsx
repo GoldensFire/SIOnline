@@ -174,11 +174,11 @@ export function RoomOptions(props: RoomOptionsProps) {
 					title={localization.select}
 				>
 					📂
-				</FlyoutButton>
 
-				<div className='packageName'>
-					{getPackageName(game.package.type, game.package.name, game.package.data)}
-				</div>
+					<div className='packageName'>
+						{getPackageName(game.package.type, game.package.name, game.package.data)}
+					</div>
+				</FlyoutButton>
 
 				<PackageFileSelector
 					ref={childRef}

@@ -54,6 +54,18 @@
 			width: auto;
 		}
 
+		.flyoutButton {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			width: 100%;
+
+			@media screen and (min-width: 800px) {
+				flex-direction: row;
+				width: auto;
+			}
+		}
+
 		.packageName {
 			display: flex;
 			justify-content: center;
