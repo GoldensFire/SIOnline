@@ -48,6 +48,7 @@ import SteamTauriHost from './host/SteamTauriHost';
 import { approveAnswerDefault, pressGameButton, rejectAnswerDefault } from './state/room2Slice';
 import { pauseGame } from './state/serverActions';
 import { setAnalytics } from './utils/Analytics';
+import { getPressedKey, matchesKey } from './utils/KeyHelpers';
 
 import './utils/polyfills';
 import './scss/style.scss';
@@ -192,29 +193,31 @@ function subscribeToExternalEvents(store: Store<State, any>, host: IHost) {
 		const state = store.getState();
 
 		if (state.ui.settingKey) {
+			const key = getPressedKey(e);
+
 			switch (state.ui.settingKey) {
 				case 'answer':
-					store.dispatch(setGameButtonKey(e.key));
+					store.dispatch(setGameButtonKey(key));
 					break;
 
 				case 'pass':
-					store.dispatch(setPassButtonKey(e.key));
+					store.dispatch(setPassButtonKey(key));
 					break;
 
 				case 'next':
-					store.dispatch(setNextButtonKey(e.key));
+					store.dispatch(setNextButtonKey(key));
 					break;
 
 				case 'yes':
-					store.dispatch(setYesButtonKey(e.key));
+					store.dispatch(setYesButtonKey(key));
 					break;
 
 				case 'no':
-					store.dispatch(setNoButtonKey(e.key));
+					store.dispatch(setNoButtonKey(key));
 					break;
 
 				case 'pause':
-					store.dispatch(setPauseButtonKey(e.key));
+					store.dispatch(setPauseButtonKey(key));
 					break;
 
 				default:
@@ -222,17 +225,17 @@ function subscribeToExternalEvents(store: Store<State, any>, host: IHost) {
 			}
 
 			store.dispatch(settingKeyChanged(null));
-		} else if (e.key === state.settings.gameButtonKey) {
+		} else if (matchesKey(e, state.settings.gameButtonKey)) {
 			store.dispatch(pressGameButton());
-		} else if (e.key === state.settings.passButtonKey) {
+		} else if (matchesKey(e, state.settings.passButtonKey)) {
 			store.dispatch(roomActionCreators.onPass());
-		} else if (e.key === state.settings.nextButtonKey) {
+		} else if (matchesKey(e, state.settings.nextButtonKey)) {
 			store.dispatch(roomActionCreators.moveNext());
-		} else if (e.key === state.settings.yesButtonKey) {
+		} else if (matchesKey(e, state.settings.yesButtonKey)) {
 			store.dispatch(approveAnswerDefault());
-		} else if (e.key === state.settings.noButtonKey) {
+		} else if (matchesKey(e, state.settings.noButtonKey)) {
 			store.dispatch(rejectAnswerDefault());
-		} else if (e.key === state.settings.pauseButtonKey) {
+		} else if (matchesKey(e, state.settings.pauseButtonKey)) {
 			store.dispatch(pauseGame());
 		}
 
