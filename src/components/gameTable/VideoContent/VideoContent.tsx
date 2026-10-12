@@ -91,8 +91,6 @@ export const VideoContent: React.FC<VideoContentProps> = ({
 		};
 
 		return () => {
-			appDispatch(mediaTimeLeftChanged({ uri, timeLeft: 0 }));
-
 			if (videoRef.current) {
 				videoRef.current.src = '';
 				videoRef.current.load();
@@ -156,6 +154,11 @@ export const VideoContent: React.FC<VideoContentProps> = ({
 		if (video && Number.isFinite(video.duration)) {
 			appDispatch(mediaTimeLeftChanged({ uri, timeLeft: Math.ceil(video.duration - video.currentTime) }));
 		}
+	}, [appDispatch, uri]);
+
+	// The component is reused when another video takes its place, so the time left is cleared on every uri change, not only on unmount
+	useEffect(() => () => {
+		appDispatch(mediaTimeLeftChanged({ uri, timeLeft: 0 }));
 	}, [appDispatch, uri]);
 
 	const onVideoEnded = useCallback(() => {
